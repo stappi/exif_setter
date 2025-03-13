@@ -22,6 +22,7 @@ import com.stappi.exifmerger.utilities.GpsCoordinate;
 import com.stappi.exifmerger.utilities.MetadataExtractor;
 import com.stappi.exifmerger.utilities.MetadataTag;
 import com.stappi.exifmerger.utilities.MetadataWriter;
+import lombok.Getter;
 import org.apache.commons.imaging.ImagingException;
 
 /**
@@ -41,9 +42,10 @@ public class Photo {
     private static final SimpleDateFormat DATE_TIME_FORMAT
             = new SimpleDateFormat("yyyy:MM:dd kk:mm:ss");
 
-    private File file;
+    @Getter
+    private final File file;
     private MetadataExtractor metadataExtractor;
-    private MetadataWriter metadataWriter;
+    private final MetadataWriter metadataWriter;
 
     public Photo(File file) throws IOException {
         this.file = file;
@@ -52,14 +54,14 @@ public class Photo {
     }
 
     public Date getCaptureDate() throws IOException, ParseException {
-        return DATE_TIME_FORMAT.parse(metadataExtractor.getMetadataValue(MetadataTag.CAPTURE_DATE));
+        return DATE_TIME_FORMAT.parse(metadataExtractor.getMetadataValue(MetadataTag.CAPTURE_DATE).replace("'", ""));
     }
 
     public void setCaptureDate(Date captureDate) throws IOException {
         setValue(MetadataTag.CAPTURE_DATE, DATE_TIME_FORMAT.format(captureDate));
     }
-    
-    public String getAuthors() throws ImagingException {        
+
+    public String getAuthors() throws ImagingException {
         return metadataExtractor.getMetadataValue(MetadataTag.AUTHORS);
     }
 
@@ -85,9 +87,9 @@ public class Photo {
         return paths.stream()
                 .map(File::new)
                 .flatMap(file -> file.isDirectory()
-                ? Optional.ofNullable(file.listFiles()).map(Arrays::stream).orElse(Stream.empty())
-                : Stream.of(file))
-                .filter(file -> ACCEPTED_FILES.accept(file))
+                        ? Optional.ofNullable(file.listFiles()).stream().flatMap(Arrays::stream)
+                        : Stream.of(file))
+                .filter(ACCEPTED_FILES::accept)
                 .distinct()
                 .flatMap(file -> {
                     try {
