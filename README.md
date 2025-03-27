@@ -1,6 +1,10 @@
 # ExifMerger
 Command line tool, to set exif data for photos.
 
+### Exiftool
+
+* `exiftool -CreationTime="2019:04:30 14:00:55" 20190430-140055_Australien_Sharkbay.png`
+
 ### EXIF-Tags aus `ExifTagConstants.java`
 
 | **Tag**                  | **Konstante**                         | **Beschreibung** |

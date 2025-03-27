@@ -37,20 +37,24 @@ public class PhotoTest {
 
     private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd_kkmmss");
 
+    private final static String IMAGE_JPG_REDDING = "images_1/20120915-210644_Redding.jpg";
+    private final static String IMAGE_JPG_BERLIN = "images_1/20130407-203051_Berlin.jpg";
+    private final static String IMAGE_TIF_RAWA = "images_1/20171101-080313_Rawa_Island.tif";
+    private final static String IMAGE_PNG_SHARKBAY = "images_1/20190430-140055_Australien_Sharkbay.png";
+
     private static Stream<Arguments> expectedCaptureDate() {
         return Stream.of(
-                Arguments.of("images_3/20120915-210644_Redding.jpg", "20120915_210644"),
-                Arguments.of("images_3/20120915-210644_Redding.png", "20120915_210644"),
-                Arguments.of("images_3/20130407-165015_Berlin.jpg", "20130407_165015"),
-                Arguments.of("images_3/20200522-144535_Tierpark.ARW", "20200522_144535"),
-                Arguments.of("images_3/20201025-171154_Spaziergang_Ebersberg.dng", "20201025_171154")
+                Arguments.of(IMAGE_JPG_REDDING, "20120915_210644"),
+                Arguments.of(IMAGE_JPG_BERLIN, "20130407_165015"),
+                Arguments.of(IMAGE_TIF_RAWA, "20171031_080313"),
+                Arguments.of(IMAGE_PNG_SHARKBAY, "20190430_140055")
         );
     }
 
     private static Stream<Arguments> expectedAuthors() {
         return Stream.of(
-                Arguments.of("images_3/20120915-210644_Redding.jpg", "Peter Wutzengruber"),
-                Arguments.of("images_3/20130407-165015_Berlin.jpg", "Peter Wutzengruber")//,
+                Arguments.of(IMAGE_JPG_REDDING, "Peter Wutzengruber"),
+                Arguments.of(IMAGE_JPG_BERLIN, "Peter Wutzengruber")//,
 //                Arguments.of("images_3/20200522-144535_Tierpark.ARW", ""),
 //                Arguments.of("images_3/20201025-171154_Spaziergang_Ebersberg.dng", "")
         );
@@ -58,17 +62,16 @@ public class PhotoTest {
 
     private static Stream<Arguments> expectedTitle() {
         return Stream.of(
-                Arguments.of("images_3/20120915-210644_Redding.jpg", "Redding in Kalifornien"),
-                Arguments.of("images_3/20130407-165015_Berlin.jpg", "Berliner Fernsehturm"),
-                Arguments.of("images_3/20200522-144535_Tierpark.ARW", "Wildpark Frankenhof"),
-                Arguments.of("images_3/20201025-171154_Spaziergang_Ebersberg.dng", "Wald in Ebersberg")
+                Arguments.of(IMAGE_JPG_REDDING, "Redding in Kalifornien"),
+                Arguments.of(IMAGE_JPG_BERLIN, "Alexanderplatz in Berlin")//,
+//                Arguments.of(IMAGE_TIF_RAWA, "Rawa Island")
         );
     }
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "images_3/20120915-210644_Redding.jpg",
-            "images_3/20130407-165015_Berlin.jpg"
+            IMAGE_JPG_REDDING,
+            IMAGE_JPG_BERLIN
     })
     void getSetCaptureDate(String photoPath) throws URISyntaxException, IOException, ParseException {
         Date expectedDate = new Date(System.currentTimeMillis());
@@ -87,9 +90,8 @@ public class PhotoTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "images_3/20120915-210644_Redding.png",
-            "images_3/20200522-144535_Tierpark.ARW",
-            "images_3/20201025-171154_Spaziergang_Ebersberg.dng"
+            IMAGE_TIF_RAWA,
+            IMAGE_PNG_SHARKBAY
     })
     void setCaptureDateException(String photoPath) throws URISyntaxException, IOException {
         Photo photo = createPhoto(photoPath, false);
@@ -106,8 +108,8 @@ public class PhotoTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "images_3/20120915-210644_Redding.jpg",
-            "images_3/20130407-165015_Berlin.jpg"
+            IMAGE_JPG_REDDING,
+            IMAGE_JPG_BERLIN
     })
     void getSetAuthors(String photoPath) {
         try {
@@ -124,8 +126,8 @@ public class PhotoTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "images_3/20120915-210644_Redding.jpg",
-            "images_3/20130407-165015_Berlin.jpg"
+            IMAGE_JPG_REDDING,
+            IMAGE_JPG_BERLIN
     })
     void getSetGps(String photoPath) throws IOException, URISyntaxException {
         double longitude = -73.989308;
@@ -145,8 +147,8 @@ public class PhotoTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "images_3/20120915-210644_Redding.jpg",
-            "images_3/20130407-165015_Berlin.jpg"
+            IMAGE_JPG_REDDING,
+            IMAGE_JPG_BERLIN
     })
     void getSetTitle(String photoPath) {
         try {

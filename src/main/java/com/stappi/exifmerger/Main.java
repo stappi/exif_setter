@@ -5,6 +5,7 @@ import static com.stappi.exifmerger.CommandLineOperator.VERSION;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,15 +21,18 @@ import org.apache.commons.imaging.ImagingException;
  */
 public class Main {
 
+    private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd_kkmmss");
+
     public static void main(String[] args) throws IOException, ParseException {
 
         try {
 //            Photo photo = new Photo(new File("C:\\Users\\Michael Stappert\\Documents\\NetBeansProjects\\ExifMerger\\src\\test\\resources\\images_2\\20181109-141035_Marokko_Schildkroete.jpg"));
 //            Photo photo = new Photo(new File("C:\\Users\\Michael Stappert\\Documents\\NetBeansProjects\\ExifMerger\\src\\test\\resources\\images_3\\20200522-144535_Tierpark.ARW"));
-            Photo photo = new Photo(new File("C:\\Users\\Michael Stappert\\Documents\\NetBeansProjects\\ExifMerger\\target\\test-classes\\images_3\\test_20120915-210644_Redding.jpg"));
+//            Photo photo = new Photo(new File("C:\\Users\\Michael Stappert\\Documents\\NetBeansProjects\\ExifMerger\\target\\test-classes\\images_3\\test_20120915-210644_Redding.jpg"));
+            Photo photo = new Photo(new File("C:\\Users\\micha\\IdeaProjects\\exif_setter\\src\\test\\resources\\images_1\\20130407-203051_Berlin.jpg"));
 //            Photo photo = new Photo(new File("C:\\Users\\Michael Stappert\\Documents\\NetBeansProjects\\ExifMerger\\src\\test\\resources\\images_3\\20120915-210644_Redding.png"));
             System.out.println("--> " + photo.getCaptureDate());
-            photo.setCaptureDate(new Date(System.currentTimeMillis()));
+            photo.setCaptureDate(DATE_TIME_FORMAT.parse("20130407_165015"));
         } catch (ImagingException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
