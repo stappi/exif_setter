@@ -23,21 +23,18 @@ import java.util.Optional;
 @Getter
 public enum MetadataTag {
     AUTHORS(MicrosoftTagConstants.EXIF_TAG_XPAUTHOR, "", ""),
-    CAPTURE_DATE(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL, "Creation Time", "DateTimeOriginal");
+    CAPTURE_DATE(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL, "Creation Time", "DateTimeOriginal"),
+    TITLE(MicrosoftTagConstants.EXIF_TAG_XPTITLE, "", "");
 
-    private TagInfo jpegTag;
-    private String pngTag;
-    private String tiffTag;
+    private final TagInfo jpegTag;
+    private final String pngTag;
+    private final String tiffTag;
 
     public Optional<TiffOutputDirectory> getOutputDirectory(TiffOutputSet outputSet) throws ImagingException {
-        switch (this) {
-            case AUTHORS:
-                return Optional.of(outputSet.getOrCreateRootDirectory());
-            case CAPTURE_DATE:
-                return Optional.of(outputSet.getOrCreateExifDirectory());
-            default:
-                return Optional.empty();
-        }
-//        final TiffOutputDirectory intDir = outputSet.getInteroperabilityDirectory();
+        return switch (this) {
+            case AUTHORS -> Optional.of(outputSet.getOrCreateRootDirectory());
+            case CAPTURE_DATE -> Optional.of(outputSet.getOrCreateExifDirectory());
+            default -> Optional.empty();
+        };
     }
 }

@@ -47,6 +47,24 @@ public class PhotoTest {
         );
     }
 
+    private static Stream<Arguments> expectedAuthors() {
+        return Stream.of(
+                Arguments.of("images_3/20120915-210644_Redding.jpg", "Peter Wutzengruber"),
+                Arguments.of("images_3/20130407-165015_Berlin.jpg", "Peter Wutzengruber")//,
+//                Arguments.of("images_3/20200522-144535_Tierpark.ARW", ""),
+//                Arguments.of("images_3/20201025-171154_Spaziergang_Ebersberg.dng", "")
+        );
+    }
+
+    private static Stream<Arguments> expectedTitle() {
+        return Stream.of(
+                Arguments.of("images_3/20120915-210644_Redding.jpg", "Redding in Kalifornien"),
+                Arguments.of("images_3/20130407-165015_Berlin.jpg", "Berliner Fernsehturm"),
+                Arguments.of("images_3/20200522-144535_Tierpark.ARW", "Wildpark Frankenhof"),
+                Arguments.of("images_3/20201025-171154_Spaziergang_Ebersberg.dng", "Wald in Ebersberg")
+        );
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {
             "images_3/20120915-210644_Redding.jpg",
@@ -80,6 +98,13 @@ public class PhotoTest {
     }
 
     @ParameterizedTest
+    @MethodSource("expectedAuthors")
+    void getAuthors(String photoPath, String expectedAuthors) throws URISyntaxException, IOException {
+        Photo photo = createPhoto(photoPath, false);
+        assertThat(photo.getAuthors()).isEqualTo(expectedAuthors);
+    }
+
+    @ParameterizedTest
     @ValueSource(strings = {
             "images_3/20120915-210644_Redding.jpg",
             "images_3/20130407-165015_Berlin.jpg"
@@ -109,6 +134,31 @@ public class PhotoTest {
         photo.setGps(longitude, latitude);
         assertThat(photo.getGps()).isEqualTo(Optional.of(new GpsCoordinate(longitude, latitude)));
         removeFile(photo.getFile());
+    }
+
+    @ParameterizedTest
+    @MethodSource("expectedTitle")
+    void getTile(String photoPath, String expectedTitle) throws URISyntaxException, IOException {
+        Photo photo = createPhoto(photoPath, false);
+        assertThat(photo.getTitle()).isEqualTo(expectedTitle);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "images_3/20120915-210644_Redding.jpg",
+            "images_3/20130407-165015_Berlin.jpg"
+    })
+    void getSetTitle(String photoPath) {
+        try {
+            String test = "Test Title";
+            File photoFile = copyFile(loadFile(photoPath));
+            Photo photo = new Photo(photoFile);
+            photo.setTitle(test);
+            assertThat(photo.getTitle()).isEqualTo(test);
+            removeFile(photoFile);
+        } catch (URISyntaxException | IOException ex) {
+            Logger.getLogger(PhotoTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private Photo createPhoto(String photoPath, boolean copyFile) throws URISyntaxException, IOException {

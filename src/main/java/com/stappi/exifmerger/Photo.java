@@ -69,6 +69,14 @@ public class Photo {
         setValue(MetadataTag.AUTHORS, authors);
     }
 
+    public String getTitle() throws ImagingException {
+        return metadataExtractor.getMetadataValue(MetadataTag.TITLE);
+    }
+
+    public void setTitle(String title) throws IOException {
+        setValue(MetadataTag.TITLE, title);
+    }
+
     public Optional<GpsCoordinate> getGps() throws IOException {
         return metadataExtractor.getGpsCoordinate();
     }
